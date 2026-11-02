@@ -1,0 +1,1 @@
+{"name":"bizflow/php-erp-adapter","description":"Optional PHP integration service for BizFlow ERP","type":"project","require":{"php":">=8.2","mongodb/mongodb":"^1.20"},"autoload":{"psr-4":{"BizFlow\\":"src/"}}}

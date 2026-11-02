@@ -1,0 +1,5 @@
+import {createContext,useContext,useEffect,useState,type ReactNode} from 'react';import {api} from '../services/api';import type {User} from '../types';
+type AuthValue={user:User|null;loading:boolean;login:(email:string,password:string)=>Promise<void>;logout:()=>void};
+const C=createContext<AuthValue>({user:null,loading:true,login:async()=>{},logout:()=>{}});
+export function AuthProvider({children}:{children:ReactNode}){const [user,setUser]=useState<User|null>(null);const [loading,setLoading]=useState(true);useEffect(()=>{const saved=localStorage.getItem('bizflow_user');if(saved)setUser(JSON.parse(saved));setLoading(false);},[]);const login=async(email:string,password:string)=>{const {data}=await api.post('/auth/login',{email,password});localStorage.setItem('bizflow_token',data.token);localStorage.setItem('bizflow_user',JSON.stringify(data.user));setUser(data.user);};const logout=()=>{localStorage.removeItem('bizflow_token');localStorage.removeItem('bizflow_user');setUser(null);};return <C.Provider value={{user,loading,login,logout}}>{children}</C.Provider>;}
+export const useAuth=()=>useContext(C);
